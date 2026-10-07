@@ -18,9 +18,19 @@ What it does:
 - Learns what you use: frequently and recently launched items rank first and
   show as suggestions when the field is empty.
 
-## Build and install
+## Install
 
-Requires Xcode command line tools (Swift 5.9+), macOS 13+.
+**Download:** grab `Quickly-x.y.z.zip` from the
+[latest release](https://github.com/naveen/quickly/releases/latest), unzip, and
+drag `Quickly.app` to `/Applications`. The app is not notarized, so the first
+time macOS will say it can't verify the developer: right-click the app, choose
+Open, and confirm once. Or clear the flag from a terminal:
+
+```sh
+xattr -d com.apple.quarantine /Applications/Quickly.app
+```
+
+**Build from source:** requires Xcode command line tools (Swift 5.9+), macOS 13+.
 
 ```sh
 make install     # builds, copies to /Applications, launches
@@ -31,6 +41,16 @@ if it is still enabled and offers to open System Settings → Keyboard →
 Keyboard Shortcuts → Spotlight, where you can turn off "Show Spotlight search".
 Other targets: `make run` (build and launch from `build/`), `make test`,
 `make dist` (zip for a GitHub release), `make uninstall`.
+
+## Releases
+
+Each release on the [Releases page](https://github.com/naveen/quickly/releases)
+carries a zipped `Quickly.app` built by GitHub Actions from the tagged commit.
+To cut one, bump `CFBundleShortVersionString` in `Support/Info.plist`, then:
+
+```sh
+git tag v0.2.0 && git push origin v0.2.0
+```
 
 ## Keys
 
