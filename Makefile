@@ -39,7 +39,7 @@ install: build
 	rm -rf /Applications/Quickly.app
 	cp -R $(APP) /Applications/Quickly.app
 	open /Applications/Quickly.app
-	@echo "Installed to /Applications/Quickly.app — press ⌥Space"
+	@echo "Installed to /Applications/Quickly.app — press ⌘Space"
 
 # Zip the app for a GitHub release. ditto keeps the bundle's metadata intact.
 dist: build
