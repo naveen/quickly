@@ -15,6 +15,9 @@ public enum AppScanner {
             URL(fileURLWithPath: "/System/Applications"),
             home.appendingPathComponent("Applications"),
             URL(fileURLWithPath: "/System/Library/CoreServices/Applications"),
+            // Safari ships in a cryptex; /Applications/Safari.app is only a
+            // hidden symlink to it, which the hidden-file filter skips.
+            URL(fileURLWithPath: "/System/Cryptexes/App/System/Applications"),
         ]
     }
 
