@@ -1,6 +1,19 @@
 import AppKit
+import Carbon
 import ServiceManagement
 import QuicklyCore
+
+enum SpotlightShortcut {
+    /// Reads the "Show Spotlight search" symbolic hotkey (id 64). Missing means enabled.
+    static var isEnabled: Bool {
+        guard let all = UserDefaults(suiteName: "com.apple.symbolichotkeys")?.dictionary(forKey: "AppleSymbolicHotKeys"),
+              let entry = all["64"] as? [String: Any]
+        else { return true }
+        if let enabled = entry["enabled"] as? Bool { return enabled }
+        if let enabled = entry["enabled"] as? Int { return enabled != 0 }
+        return true
+    }
+}
 
 final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
     private let index = SearchIndex()
@@ -16,6 +29,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
         index.start()
         registerHotKey()
         if Preferences.showsStatusItem { installStatusItem() }
+        warnIfSpotlightOwnsHotKey()
         if CommandLine.arguments.contains("--show") { launcher.show() }
     }
 
@@ -52,6 +66,23 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
         }
         if hotKey == nil {
             NSLog("Quickly: hotkey '\(spec)' is already taken by another app")
+        }
+    }
+
+    /// ⌘Space is Spotlight's by default. If it is still enabled, Spotlight wins
+    /// and Quickly never sees the key, so point the user at the right setting.
+    private func warnIfSpotlightOwnsHotKey() {
+        guard let combo = HotKey.parse(Preferences.hotKey),
+              combo.keyCode == UInt32(kVK_Space), combo.modifiers == UInt32(cmdKey),
+              SpotlightShortcut.isEnabled else { return }
+        let alert = NSAlert()
+        alert.messageText = "Spotlight is still using ⌘ Space"
+        alert.informativeText = "Quickly is set to ⌘ Space too, but macOS gives the shortcut to Spotlight.\n\nIn System Settings → Keyboard → Keyboard Shortcuts → Spotlight, turn off “Show Spotlight search”. Or pick another hotkey:\n\ndefaults write com.naveen.quickly hotkey \"option+space\""
+        alert.addButton(withTitle: "Open Keyboard Shortcuts")
+        alert.addButton(withTitle: "Not Now")
+        NSApp.activate(ignoringOtherApps: true)
+        if alert.runModal() == .alertFirstButtonReturn {
+            NSWorkspace.shared.open(URL(string: "x-apple.systempreferences:com.apple.Keyboard-Settings.extension?Shortcuts")!)
         }
     }
 
@@ -118,10 +149,10 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
 enum Preferences {
     private static let defaults = UserDefaults.standard
 
-    /// e.g. "option+space", "cmd+shift+space", "ctrl+`". Change with:
-    ///   defaults write com.naveen.quickly hotkey "cmd+space"
+    /// e.g. "cmd+space", "option+space", "ctrl+`". Change with:
+    ///   defaults write com.naveen.quickly hotkey "option+space"
     static var hotKey: String {
-        defaults.string(forKey: "hotkey") ?? "option+space"
+        defaults.string(forKey: "hotkey") ?? "cmd+space"
     }
 
     static var showsStatusItem: Bool {

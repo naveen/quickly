@@ -105,7 +105,7 @@ final class SearchIndex {
 final class IconCache {
     private var cache: [String: NSImage] = [:]
     private let lock = NSLock()
-    static let size = NSSize(width: 32, height: 32)
+    static let size = NSSize(width: 24, height: 24)
 
     func prefetch(_ items: [LaunchItem]) {
         for item in items { _ = icon(for: item) }
@@ -147,11 +147,11 @@ final class IconCache {
             alpha: 1
         )
         return NSImage(size: size, flipped: false) { rect in
-            let tileRect = rect.insetBy(dx: 2, dy: 2)
-            let path = NSBezierPath(roundedRect: tileRect, xRadius: 7, yRadius: 7)
+            let tileRect = rect.insetBy(dx: 1, dy: 1)
+            let path = NSBezierPath(roundedRect: tileRect, xRadius: 5.5, yRadius: 5.5)
             color.setFill()
             path.fill()
-            let config = NSImage.SymbolConfiguration(pointSize: 15, weight: .medium)
+            let config = NSImage.SymbolConfiguration(pointSize: 11, weight: .medium)
             if let base = NSImage(systemSymbolName: symbol, accessibilityDescription: nil)?.withSymbolConfiguration(config) {
                 let tinted = NSImage(size: base.size, flipped: false) { r in
                     base.draw(in: r)
@@ -160,7 +160,7 @@ final class IconCache {
                     return true
                 }
                 let s = tinted.size
-                let scale = min(18 / max(s.width, 1), 18 / max(s.height, 1), 1)
+                let scale = min(14 / max(s.width, 1), 14 / max(s.height, 1), 1)
                 let drawSize = NSSize(width: s.width * scale, height: s.height * scale)
                 let origin = NSPoint(x: rect.midX - drawSize.width / 2, y: rect.midY - drawSize.height / 2)
                 tinted.draw(in: NSRect(origin: origin, size: drawSize))

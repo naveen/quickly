@@ -3,7 +3,10 @@ BIN      = .build/release/Quickly
 CONTENTS = $(APP)/Contents
 ICON     = build/AppIcon.icns
 
-.PHONY: all build run install uninstall test clean icon
+.PHONY: all build run install uninstall test clean icon dist
+
+VERSION  = $(shell /usr/libexec/PlistBuddy -c "Print :CFBundleShortVersionString" Support/Info.plist)
+ZIP      = build/Quickly-$(VERSION).zip
 
 all: build
 
@@ -37,6 +40,12 @@ install: build
 	cp -R $(APP) /Applications/Quickly.app
 	open /Applications/Quickly.app
 	@echo "Installed to /Applications/Quickly.app — press ⌥Space"
+
+# Zip the app for a GitHub release. ditto keeps the bundle's metadata intact.
+dist: build
+	@rm -f $(ZIP)
+	ditto -c -k --keepParent $(APP) $(ZIP)
+	@echo "Wrote $(ZIP)"
 
 uninstall:
 	@pkill -x Quickly 2>/dev/null || true

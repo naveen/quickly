@@ -1,0 +1,25 @@
+# Builds Quickly.app on a tagged push (v0.1.0, v0.2.0, …) and attaches the zip
+# to a GitHub release. Run locally with `make dist` to produce the same file.
+name: Release
+
+on:
+  push:
+    tags: ["v*"]
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: macos-15
+    steps:
+      - uses: actions/checkout@v4
+      - name: Test
+        run: swift test
+      - name: Build zip
+        run: make dist
+      - name: Publish release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: build/Quickly-*.zip
+          generate_release_notes: true

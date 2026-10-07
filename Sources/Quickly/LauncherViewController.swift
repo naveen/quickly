@@ -2,8 +2,8 @@ import AppKit
 import QuicklyCore
 
 final class LauncherViewController: NSViewController, NSTextFieldDelegate, NSTableViewDataSource, NSTableViewDelegate {
-    static let barHeight: CGFloat = 60
-    static let rowHeight: CGFloat = 48
+    static let barHeight: CGFloat = 52
+    static let rowHeight: CGFloat = 40
     static let maxVisibleRows = 8
     static let cornerRadius: CGFloat = 14
 
@@ -42,7 +42,7 @@ final class LauncherViewController: NSViewController, NSTextFieldDelegate, NSTab
         searchField.isBordered = false
         searchField.drawsBackground = false
         searchField.focusRingType = .none
-        searchField.font = .systemFont(ofSize: 24, weight: .regular)
+        searchField.font = .systemFont(ofSize: 20, weight: .regular)
         searchField.placeholderString = "Search apps, settings…"
         searchField.delegate = self
         searchField.cell?.sendsActionOnEndEditing = false
@@ -259,15 +259,15 @@ final class ResultCellView: NSTableCellView {
     override init(frame: NSRect) {
         super.init(frame: frame)
         iconView.imageScaling = .scaleProportionallyUpOrDown
-        titleLabel.font = .systemFont(ofSize: 15, weight: .medium)
+        titleLabel.font = .systemFont(ofSize: 12, weight: .medium)
         titleLabel.lineBreakMode = .byTruncatingTail
-        subtitleLabel.font = .systemFont(ofSize: 13)
+        subtitleLabel.font = .systemFont(ofSize: 11)
         subtitleLabel.textColor = .secondaryLabelColor
         subtitleLabel.lineBreakMode = .byTruncatingTail
-        kindLabel.font = .systemFont(ofSize: 12)
+        kindLabel.font = .systemFont(ofSize: 11)
         kindLabel.textColor = .tertiaryLabelColor
         kindLabel.alignment = .right
-        shortcutLabel.font = .monospacedDigitSystemFont(ofSize: 12, weight: .medium)
+        shortcutLabel.font = .monospacedDigitSystemFont(ofSize: 11, weight: .medium)
         shortcutLabel.textColor = .tertiaryLabelColor
         shortcutLabel.alignment = .right
         for v in [iconView, titleLabel, subtitleLabel, kindLabel, shortcutLabel] { addSubview(v) }
@@ -287,11 +287,11 @@ final class ResultCellView: NSTableCellView {
     override func layout() {
         super.layout()
         let h = bounds.height
-        let iconSize: CGFloat = 30
+        let iconSize: CGFloat = 24
         iconView.frame = NSRect(x: 20, y: (h - iconSize) / 2, width: iconSize, height: iconSize)
 
         shortcutLabel.sizeToFit()
-        let shortcutWidth: CGFloat = shortcutLabel.stringValue.isEmpty ? 0 : 30
+        let shortcutWidth: CGFloat = shortcutLabel.stringValue.isEmpty ? 0 : 26
         shortcutLabel.frame = NSRect(x: bounds.width - 20 - shortcutWidth, y: (h - shortcutLabel.frame.height) / 2,
                                      width: shortcutWidth, height: shortcutLabel.frame.height)
 
@@ -300,7 +300,7 @@ final class ResultCellView: NSTableCellView {
         let kindX = shortcutLabel.frame.minX - (shortcutWidth > 0 ? 12 : 0) - kindWidth
         kindLabel.frame = NSRect(x: kindX, y: (h - kindLabel.frame.height) / 2, width: kindWidth, height: kindLabel.frame.height)
 
-        let textLeft: CGFloat = 62
+        let textLeft: CGFloat = 56
         let textRight = kindX - 12
         titleLabel.sizeToFit()
         let titleWidth = min(titleLabel.frame.width, textRight - textLeft)
@@ -310,7 +310,7 @@ final class ResultCellView: NSTableCellView {
             subtitleLabel.frame = .zero
         } else {
             subtitleLabel.sizeToFit()
-            let x = titleLabel.frame.maxX + 10
+            let x = titleLabel.frame.maxX + 8
             subtitleLabel.frame = NSRect(x: x, y: (h - subtitleLabel.frame.height) / 2 - 0.5,
                                          width: max(textRight - x, 0), height: subtitleLabel.frame.height)
         }

@@ -26,14 +26,17 @@ Requires Xcode command line tools (Swift 5.9+), macOS 13+.
 make install     # builds, copies to /Applications, launches
 ```
 
-Press **⌥ Space**. Other targets: `make run` (build and launch from `build/`),
-`make test`, `make uninstall`.
+Press **⌘ Space**. Spotlight owns that key by default; Quickly warns on launch
+if it is still enabled and offers to open System Settings → Keyboard →
+Keyboard Shortcuts → Spotlight, where you can turn off "Show Spotlight search".
+Other targets: `make run` (build and launch from `build/`), `make test`,
+`make dist` (zip for a GitHub release), `make uninstall`.
 
 ## Keys
 
 | Key | Action |
 | --- | --- |
-| ⌥ Space | Toggle Quickly |
+| ⌘ Space | Toggle Quickly |
 | ↑ ↓ | Move selection |
 | ↩ | Open selected item |
 | ⌘ ↩ | Alternate action (apps: reveal in Finder) |
@@ -46,7 +49,7 @@ Everything lives in `defaults`:
 
 ```sh
 # Change the hotkey (restart Quickly after). Modifiers: cmd, option, ctrl, shift.
-defaults write com.naveen.quickly hotkey "cmd+space"      # disable Spotlight's shortcut first
+defaults write com.naveen.quickly hotkey "option+space"   # keep ⌘Space for Spotlight
 defaults write com.naveen.quickly hotkey "ctrl+\`"
 
 # Hide the menu bar icon (also toggleable from the menu).
