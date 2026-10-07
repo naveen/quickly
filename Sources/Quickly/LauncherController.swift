@@ -103,8 +103,9 @@ final class LauncherController: NSObject, NSWindowDelegate {
     }
 
     private func execute(_ item: LaunchItem, alternate: Bool) {
+        let query = viewController.searchField.stringValue
         hide()
-        if item.kind != .result { index.usage.record(item.id) }
+        if item.kind != .result { index.usage.record(item.id, query: query) }
         let action = alternate ? (item.alternateAction ?? item.action) : item.action
         switch action {
         case .openApplication(let url):

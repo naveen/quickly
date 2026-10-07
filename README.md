@@ -15,8 +15,10 @@ What it does:
   macOS confirmation dialog).
 - **Time zone conversion** as the one built-in extension: `3pm in tokyo`,
   `9:30am pst to ist`, `time in london`, `sf to berlin`. Return copies the result.
-- Learns what you use: frequently and recently launched items rank first and
-  show as suggestions when the field is empty.
+- Learns what you use. Picking an item for a query is remembered, so once you
+  choose Google Chrome for "ch" it stays on top of Chess. Frequently launched
+  apps also rank ahead of unused ones, and show as suggestions when the field
+  is empty.
 
 ## Install
 
@@ -80,8 +82,9 @@ defaults write com.naveen.quickly showMenuBarIcon -bool false
 handy from other tools: `open quickly://toggle`, `quickly://show`,
 `quickly://hide`, `quickly://rescan`.
 
-Usage history is a small JSON file at
-`~/Library/Application Support/Quickly/usage.json`. Delete it to reset ranking.
+Usage history (launch counts and remembered query → item choices) is a small
+JSON file at `~/Library/Application Support/Quickly/usage.json`. Delete it to
+reset ranking.
 
 ## Layout
 
