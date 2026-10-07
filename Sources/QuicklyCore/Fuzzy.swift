@@ -148,6 +148,7 @@ public enum Matcher {
         var scored: [(score: Int, index: Int)] = []
         scored.reserveCapacity(32)
         let now = Date()
+        let preferred = usage?.preferredItemID(for: query.raw)
         for (i, item) in items.enumerated() {
             var best: Int?
             for key in item.keys {
@@ -156,8 +157,13 @@ public enum Matcher {
                     if best == nil || weighted > best! { best = weighted }
                 }
             }
-            guard var s = best else { continue }
+            guard let match = best else { continue }
+            var s = match
             if let usage { s += usage.bonus(for: item.id, now: now) }
+            if let preferred, preferred.id == item.id,
+               preferred.exact || match >= UsageStore.learnedMatchThreshold {
+                s += UsageStore.learnedBoost
+            }
             scored.append((s, i))
         }
         scored.sort { a, b in
